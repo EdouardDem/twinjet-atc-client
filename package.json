@@ -1,0 +1,55 @@
+{
+  "name": "twinjet-atc-client",
+  "version": "0.0.0",
+  "description": "NodeJS client for TwinJet ATC service (https://twinjet.co/)",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "update": "npm-check -u",
+    "test": "nyc mocha",
+    "lint": "prettier --write '**/*.ts'",
+    "build": "rimraf dist && tsc -p ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EdouardDem/twinjet-atc-client.git"
+  },
+  "keywords": [
+    "TwinJet",
+    "ATC",
+    "client",
+    "TypeScript",
+    "API",
+    "connector"
+  ],
+  "author": "Edouard Demotes-Mainard <e.demotes@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/EdouardDem/twinjet-atc-client/issues"
+  },
+  "homepage": "https://github.com/EdouardDem/twinjet-atc-client#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^14.0.11",
+    "husky": "^4.2.5",
+    "mocha": "^7.2.0",
+    "npm-check": "^5.9.2",
+    "nyc": "^15.1.0",
+    "prettier": "^2.0.5",
+    "pretty-quick": "^2.0.1",
+    "rimraf": "^3.0.2",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.5"
+  },
+  "engines": {
+    "node": ">=9"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "pretty-quick --staged --pattern \"**/*.ts\""
+    }
+  }
+}
