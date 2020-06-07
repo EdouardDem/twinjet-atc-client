@@ -31,6 +31,7 @@
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
+    "@hapi/code": "^8.0.1",
     "@types/mocha": "^7.0.2",
     "@types/node": "^14.0.11",
     "husky": "^4.2.5",
@@ -51,5 +52,8 @@
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
       "pre-commit": "pretty-quick --staged --pattern \"**/*.ts\""
     }
+  },
+  "dependencies": {
+    "axios": "^0.19.2"
   }
 }
