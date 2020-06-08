@@ -205,7 +205,7 @@ export interface AddressValidationErrorResponse {
     }[];
 }
 /** Client to manage jobs and validate address through the API */
-export declare class JobsClient {
+export declare class Client {
     /** Default options for this client */
     private defaultOptions;
     /** Options provided by user merged with defaults options */
@@ -213,7 +213,7 @@ export declare class JobsClient {
     /** HTTP client */
     readonly http: AxiosInstance;
     constructor(options: ClientOptions);
-    /** Create a new Job and returns the request ID */
+    /** Create a new job and returns the request ID */
     create(payload: JobPayload): Promise<string>;
     /** Cancel existing job */
     cancel(identifier: JobIdentifier): Promise<JobStatus>;
@@ -231,4 +231,4 @@ export declare class JobsClient {
     /** Convert date of timestamp to ISO 8601 Localized Datetime */
     private convertDate;
 }
-export default JobsClient;
+export default Client;

@@ -2,20 +2,20 @@ import { expect } from '@hapi/code';
 import 'mocha';
 import { AxiosRequestConfig } from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { AddressValidationErrorResponse, AddressValidationResponse, JobsClient, JobStatus } from '../src';
+import { AddressValidationErrorResponse, AddressValidationResponse, Client, JobStatus } from '../src';
 
-const JobsClientOptions = {
+const ClientOptions = {
 	live: false,
 	api_token: 'Ahngohsieb5aijooghugheF6iel0AeGh',
 	base_url: 'http://0.0.0.0',
 };
-const Client = new JobsClient(JobsClientOptions);
+const TwinJetClient = new Client(ClientOptions);
 
 // ---------------------------------------------------------------------
 //  Axios interceptor util
 let InterceptedConfig: AxiosRequestConfig;
 let InterceptedError: Error;
-Client.http.interceptors.request.use(
+TwinJetClient.http.interceptors.request.use(
 	function (config) {
 		InterceptedConfig = config;
 		return config;
@@ -81,12 +81,12 @@ const JobStatusExample: JobStatus = {
 
 describe('create', () => {
 	it('success', async () => {
-		const mock = new MockAdapter(Client.http);
+		const mock = new MockAdapter(TwinJetClient.http);
 		mock.onPost('/jobs').reply(200, {
 			request_id: 'A1B2C3D4E5',
 		});
 
-		const response = await Client.create({
+		const response = await TwinJetClient.create({
 			order_contact_name: 'Larry Bluejeans',
 			order_contact_phone: '5555555555',
 			pick_address: {
@@ -129,8 +129,8 @@ describe('create', () => {
 		});
 
 		const config = GetLastRequest();
-		expect(config.data.api_token).to.equal(JobsClientOptions.api_token);
-		expect(config.data.live).to.equal(JobsClientOptions.live);
+		expect(config.data.api_token).to.equal(ClientOptions.api_token);
+		expect(config.data.live).to.equal(ClientOptions.live);
 		expect(config.data.ready_time).to.be.a.string();
 		expect(config.data.deliver_from_time).to.be.a.string();
 		expect(config.data.deliver_to_time).to.be.a.string();
@@ -140,7 +140,7 @@ describe('create', () => {
 	});
 	it('error', async () => {
 		expect(
-			Client.create({
+			TwinJetClient.create({
 				order_contact_name: 'Larry Bluejeans',
 				order_contact_phone: '5555555555',
 				ready_time: new Date(),
@@ -170,40 +170,40 @@ describe('cancel', () => {
 		const id = 'hp7Oshiech0';
 		let config, response;
 
-		const mock = new MockAdapter(Client.http);
+		const mock = new MockAdapter(TwinJetClient.http);
 		mock.onDelete('/jobs').reply(200, JobStatusExample);
 
 		//-----------------------------------------------
-		response = await Client.cancel({
+		response = await TwinJetClient.cancel({
 			request_id: id,
 		});
 		config = GetLastRequest();
-		expect(config.data.api_token).to.equal(JobsClientOptions.api_token);
+		expect(config.data.api_token).to.equal(ClientOptions.api_token);
 		expect(config.data.request_id).to.equal(id);
 		expect(response).to.equal(JobStatusExample);
 
 		//-----------------------------------------------
-		response = await Client.cancel({
+		response = await TwinJetClient.cancel({
 			external_id: id,
 		});
 		config = GetLastRequest();
-		expect(config.data.api_token).to.equal(JobsClientOptions.api_token);
+		expect(config.data.api_token).to.equal(ClientOptions.api_token);
 		expect(config.data.external_id).to.equal(id);
 		expect(response).to.equal(JobStatusExample);
 
 		//-----------------------------------------------
-		response = await Client.cancel({
+		response = await TwinJetClient.cancel({
 			job_id: 100,
 		});
 		config = GetLastRequest();
-		expect(config.data.api_token).to.equal(JobsClientOptions.api_token);
+		expect(config.data.api_token).to.equal(ClientOptions.api_token);
 		expect(config.data.job_id).to.equal(100);
 		expect(response).to.equal(JobStatusExample);
 
 		mock.restore();
 	});
 	it('error', async () => {
-		expect(Client.cancel({})).to.reject('One of request_id, job_id, external_id or reference must be defined');
+		expect(TwinJetClient.cancel({})).to.reject('One of request_id, job_id, external_id or reference must be defined');
 	});
 });
 
@@ -231,18 +231,18 @@ describe('update', () => {
 		const id = 'hp7Oshiech0';
 		let config, response;
 
-		const mock = new MockAdapter(Client.http);
+		const mock = new MockAdapter(TwinJetClient.http);
 		mock.onPatch('/jobs').reply(200, JobStatusExample);
 
 		//-----------------------------------------------
-		response = await Client.update(
+		response = await TwinJetClient.update(
 			{
 				request_id: id,
 			},
 			payload
 		);
 		config = GetLastRequest();
-		expect(config.data.api_token).to.equal(JobsClientOptions.api_token);
+		expect(config.data.api_token).to.equal(ClientOptions.api_token);
 		expect(config.data.request_id).to.equal(id);
 		expect(config.data.ready_time).to.be.a.string();
 		expect(config.data.deliver_from_time).to.be.a.string();
@@ -250,14 +250,14 @@ describe('update', () => {
 		expect(response).to.equal(JobStatusExample);
 
 		//-----------------------------------------------
-		response = await Client.update(
+		response = await TwinJetClient.update(
 			{
 				external_id: id,
 			},
 			payload
 		);
 		config = GetLastRequest();
-		expect(config.data.api_token).to.equal(JobsClientOptions.api_token);
+		expect(config.data.api_token).to.equal(ClientOptions.api_token);
 		expect(config.data.external_id).to.equal(id);
 		expect(response).to.equal(JobStatusExample);
 
@@ -265,21 +265,21 @@ describe('update', () => {
 		delete payload.ready_time;
 		delete payload.deliver_from_time;
 		delete payload.deliver_to_time;
-		response = await Client.update(
+		response = await TwinJetClient.update(
 			{
 				job_id: 100,
 			},
 			payload
 		);
 		config = GetLastRequest();
-		expect(config.data.api_token).to.equal(JobsClientOptions.api_token);
+		expect(config.data.api_token).to.equal(ClientOptions.api_token);
 		expect(config.data.job_id).to.equal(100);
 		expect(response).to.equal(JobStatusExample);
 
 		mock.restore();
 	});
 	it('error', async () => {
-		expect(Client.update({}, payload)).to.reject('One of request_id, job_id, external_id or reference must be defined');
+		expect(TwinJetClient.update({}, payload)).to.reject('One of request_id, job_id, external_id or reference must be defined');
 	});
 });
 
@@ -288,40 +288,40 @@ describe('status', () => {
 		const id = 'hp7Oshiech0';
 		let config, response;
 
-		const mock = new MockAdapter(Client.http);
+		const mock = new MockAdapter(TwinJetClient.http);
 		mock.onPost('/status').reply(200, JobStatusExample);
 
 		//-----------------------------------------------
-		response = await Client.status({
+		response = await TwinJetClient.status({
 			request_id: id,
 		});
 		config = GetLastRequest();
-		expect(config.data.api_token).to.equal(JobsClientOptions.api_token);
+		expect(config.data.api_token).to.equal(ClientOptions.api_token);
 		expect(config.data.request_id).to.equal(id);
 		expect(response).to.equal(JobStatusExample);
 
 		//-----------------------------------------------
-		response = await Client.status({
+		response = await TwinJetClient.status({
 			external_id: id,
 		});
 		config = GetLastRequest();
-		expect(config.data.api_token).to.equal(JobsClientOptions.api_token);
+		expect(config.data.api_token).to.equal(ClientOptions.api_token);
 		expect(config.data.external_id).to.equal(id);
 		expect(response).to.equal(JobStatusExample);
 
 		//-----------------------------------------------
-		response = await Client.status({
+		response = await TwinJetClient.status({
 			job_id: 100,
 		});
 		config = GetLastRequest();
-		expect(config.data.api_token).to.equal(JobsClientOptions.api_token);
+		expect(config.data.api_token).to.equal(ClientOptions.api_token);
 		expect(config.data.job_id).to.equal(100);
 		expect(response).to.equal(JobStatusExample);
 
 		mock.restore();
 	});
 	it('error', async () => {
-		expect(Client.status({})).to.reject('One of request_id, job_id, external_id or reference must be defined');
+		expect(TwinJetClient.status({})).to.reject('One of request_id, job_id, external_id or reference must be defined');
 	});
 });
 
@@ -352,10 +352,10 @@ describe('address validation', () => {
 		};
 		let config, response;
 
-		const mock = new MockAdapter(Client.http);
+		const mock = new MockAdapter(TwinJetClient.http);
 		mock.onPost('/validate').reply(200, responseData);
 
-		response = await Client.addressValidation({
+		response = await TwinJetClient.addressValidation({
 			pick_address: {
 				address_name: 'TCB Courier',
 				street_address: '565 Ellis St',
@@ -379,12 +379,12 @@ describe('address validation', () => {
 		});
 
 		config = GetLastRequest();
-		expect(config.data.api_token).to.equal(JobsClientOptions.api_token);
+		expect(config.data.api_token).to.equal(ClientOptions.api_token);
 		expect(config.data.pick_address).to.be.an.object();
 		expect(config.data.deliver_address).to.be.an.object();
 		expect(response).to.equal(responseData);
 
-		response = await Client.addressValidation({
+		response = await TwinJetClient.addressValidation({
 			pick_address: {
 				address_name: 'TCB Courier',
 				street_address: '565 Ellis St',
@@ -398,12 +398,12 @@ describe('address validation', () => {
 		});
 
 		config = GetLastRequest();
-		expect(config.data.api_token).to.equal(JobsClientOptions.api_token);
+		expect(config.data.api_token).to.equal(ClientOptions.api_token);
 		expect(config.data.pick_address).to.be.an.object();
 		expect(config.data.deliver_address).to.be.undefined();
 		expect(response).to.equal(responseData);
 
-		response = await Client.addressValidation({
+		response = await TwinJetClient.addressValidation({
 			deliver_address: {
 				address_name: 'TCB Courier',
 				street_address: '565 Ellis St',
@@ -417,7 +417,7 @@ describe('address validation', () => {
 		});
 
 		config = GetLastRequest();
-		expect(config.data.api_token).to.equal(JobsClientOptions.api_token);
+		expect(config.data.api_token).to.equal(ClientOptions.api_token);
 		expect(config.data.pick_address).to.be.undefined();
 		expect(config.data.deliver_address).to.be.an.object();
 		expect(response).to.equal(responseData);
@@ -455,11 +455,11 @@ describe('address validation', () => {
 			},
 		};
 
-		const mock = new MockAdapter(Client.http);
+		const mock = new MockAdapter(TwinJetClient.http);
 		mock.onPost('/validate').reply(200, responseData);
 
 		expect(
-			Client.addressValidation({
+			TwinJetClient.addressValidation({
 				pick_address: {
 					address_name: 'TCB Courier',
 					street_address: '565 Ellis St',
@@ -486,6 +486,6 @@ describe('address validation', () => {
 		mock.restore();
 	});
 	it('error', async () => {
-		expect(Client.addressValidation({})).to.reject('Pick address and/or deliver address must be defined');
+		expect(TwinJetClient.addressValidation({})).to.reject('Pick address and/or deliver address must be defined');
 	});
 });

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.JobsClient = exports.JobStatusCode = exports.PaymentMethod = void 0;
+exports.Client = exports.JobStatusCode = exports.PaymentMethod = void 0;
 const axios_1 = __importDefault(require("axios"));
 var PaymentMethod;
 (function (PaymentMethod) {
@@ -48,7 +48,7 @@ var JobStatusCode;
     JobStatusCode[JobStatusCode["UNDELIVERABLE"] = 63] = "UNDELIVERABLE";
 })(JobStatusCode = exports.JobStatusCode || (exports.JobStatusCode = {}));
 /** Client to manage jobs and validate address through the API */
-class JobsClient {
+class Client {
     constructor(options) {
         /** Default options for this client */
         this.defaultOptions = {
@@ -62,7 +62,7 @@ class JobsClient {
             timeout: this.options.timeout,
         });
     }
-    /** Create a new Job and returns the request ID */
+    /** Create a new job and returns the request ID */
     create(payload) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!payload.pick_address && !payload.deliver_address) {
@@ -160,6 +160,6 @@ class JobsClient {
         return toConvert.toISOString();
     }
 }
-exports.JobsClient = JobsClient;
-exports.default = JobsClient;
+exports.Client = Client;
+exports.default = Client;
 //# sourceMappingURL=index.js.map

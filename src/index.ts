@@ -215,7 +215,7 @@ export interface AddressValidationErrorResponse {
 }
 
 /** Client to manage jobs and validate address through the API */
-export class JobsClient {
+export class Client {
 	/** Default options for this client */
 	private defaultOptions: Partial<ClientOptions> = {
 		base_url: 'https://www.twinjet.co/api/v1',
@@ -235,7 +235,7 @@ export class JobsClient {
 		});
 	}
 
-	/** Create a new Job and returns the request ID */
+	/** Create a new job and returns the request ID */
 	async create(payload: JobPayload): Promise<string> {
 		if (!payload.pick_address && !payload.deliver_address) {
 			throw new Error('Pick address and/or deliver address must be defined');
@@ -365,4 +365,4 @@ export class JobsClient {
 	}
 }
 
-export default JobsClient;
+export default Client;
