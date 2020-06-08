@@ -262,6 +262,9 @@ describe('update', () => {
 		expect(response).to.equal(JobStatusExample);
 
 		//-----------------------------------------------
+		delete payload.ready_time;
+		delete payload.deliver_from_time;
+		delete payload.deliver_to_time;
 		response = await Client.update(
 			{
 				job_id: 100,
