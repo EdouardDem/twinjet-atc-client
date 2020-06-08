@@ -1,6 +1,6 @@
 {
   "name": "twinjet-atc-client",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "NodeJS client for TwinJet ATC service (https://twinjet.co/)",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
