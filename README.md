@@ -6,6 +6,12 @@ JavaScript client for TwinJet ATC service (https://twinjet.co/)
 
 For more information about the TwinJet ATC API: https://twinjet.co/developer/
 
+## Installation
+
+```bash
+npm install --save twinjet-atc-client
+```
+
 ## Usage
 
 ### New client
@@ -29,7 +35,7 @@ You can use more options in client constructor:
 const options = {
     api_token: 'Ahngohsieb5aijooghugheF6iel0AeGh', // Required
     base_url: 'https://api.other.io/v1', // Override API base URL. Default: 'https://www.twinjet.co/api/v1'
-    timeout: 2000, // Requests timeout, in milliseconds. Default: 10000
+    timeout: 2000, // Requests timeout, in milliseconds. 0 to disable. Default: 10000
     live: false // Live or test mode. Default: true
 }
 ```
