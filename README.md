@@ -19,12 +19,12 @@ npm install --save twinjet-atc-client
 Before making requests, you need to instantiate a new client:
 
 ```javascript
-const TwinJetATCClient = require('twinjet-atc-client');
+const TwinJetATC = require('twinjet-atc-client');
 
 const options = {
     api_token: 'Ahngohsieb5aijooghugheF6iel0AeGh',
 };
-const client = new TwinJetATCClient(options);
+const client = new TwinJetATC.Client(options);
 ```
 
 #### More options
